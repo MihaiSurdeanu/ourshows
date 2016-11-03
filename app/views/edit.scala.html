@@ -1,0 +1,77 @@
+@(shows: List[Show])
+
+@main("our shows: edit") {
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">our shows</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">home</a></li>
+        <li><a href="/edit">edit</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+
+<div class="container theme-showcase" role="main">
+
+  <div class="page-header">
+    <h3>add new show:</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+
+      <form class="form" action="/insert" method="POST">
+        <div class="form-group">
+          <input name="name" type="text" placeholder="Name of your show" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <input name="episodesUrl" type="text" placeholder="Enter the URL that lists the full episodes for this show" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-default">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <h3>remove existing shows:</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>name</th>
+          <th>episodes url</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(s <- shows){
+          <tr><td>@s.name</td><td>@s.episodesUrl</td><td>
+            <form action="/delete" method="POST">
+              <input type="hidden" name="name" value="@s.name">
+              <input type="hidden" name="episodesUrl" value="@s.episodesUrl">
+              <button type="submit" class="btn btn-default">Delete</button>
+            </form>
+          </td></tr>
+        }
+        <tr>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+}

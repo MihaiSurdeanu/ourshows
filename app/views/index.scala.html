@@ -1,0 +1,45 @@
+@(shows: List[Show])
+
+@main("our shows") {
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">our shows</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">home</a></li>
+        <li><a href="/edit">edit</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+
+<div class="container theme-showcase" role="main">
+
+<div class="row">
+    @for(s <- shows) {
+      <div class="col-sm-4">
+        <div class="list-group">
+          <a href="@s.episodesUrl" class="list-group-item active" target="_blank">
+            @s.name
+          </a>
+          @for(e <- s.episodes) {
+            <a href="@e._1" class="list-group-item" target="_blank">@e._2</a>
+          }
+        </div>
+      </div><!-- /.col-sm-4 -->
+    }
+
+</div>
+
+}
