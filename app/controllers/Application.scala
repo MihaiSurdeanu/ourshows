@@ -43,7 +43,8 @@ object Application extends Controller{
   def delete = DBAction { implicit rs =>
     val show = showForm.bindFromRequest.get
 
-    // val q = shows.filter(_ == show.name)
+    val q = shows.filter(_.name === show.name)
+    q.delete
 
     Redirect(routes.Application.edit)
   }
