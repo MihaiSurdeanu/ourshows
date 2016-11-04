@@ -5,7 +5,7 @@ import java.net.URL
 import play.api.db.slick.Config.driver.simple._
 
 case class Show(name: String, episodesUrl: String) {
-  def episodes:List[(String, String)] = {
+  def episodes:List[Episode] = {
     val html = scala.io.Source.fromURL(episodesUrl.toString).mkString
     //val html = scala.io.Source.fromFile("test/modern_family.html").mkString
     EpisodeParser.parseEpisodes(new URL(episodesUrl.toString), html)

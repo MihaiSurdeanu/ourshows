@@ -34,7 +34,7 @@
             @s.name
           </a>
           @for(e <- s.episodes) {
-            <a href="@e._1" class="list-group-item" target="_blank">@e._2</a>
+            <a href="@e.url" class="list-group-item" target="_blank">S@e.season-E@e.number: @e.title</a>
           }
         </div>
       </div><!-- /.col-sm-4 -->

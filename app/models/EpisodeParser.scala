@@ -12,7 +12,7 @@ import scala.io.Source
   * Date: 10/28/16
   */
 object EpisodeParser {
-  def parseEpisodes(url:URL, html:String):List[(String, String)] = {
+  def parseEpisodes(url:URL, html:String):List[Episode] = {
     if(url.getHost.contains("abc.go.com")) {
       parseABCEpisodes(url, html)
     } else if(url.getHost.contains("cbs.com")) {
@@ -26,8 +26,8 @@ object EpisodeParser {
     }
   }
 
-  def parseABCEpisodes(url:URL, html:String):List[(String, String)] = {
-    val episodes = new ListBuffer[(String, String)]
+  def parseABCEpisodes(url:URL, html:String):List[Episode] = {
+    val episodes = new ListBuffer[Episode]
     val matcher = ABC_EPISODE.matcher(html)
     //println(s"Trying to match: ${ABC_EPISODE.toString}")
     //println(html)
@@ -35,13 +35,15 @@ object EpisodeParser {
     while(matcher.find() && count < MAX_EPISODES) {
       val text = matcher.group()
       val episodeUrl = url.getProtocol + "://" + url.getHost + matcher.group(1)
-      val episodeTitle = matcher.group(2)
+      val seasonNumber = matcher.group(2).toInt
+      val episodeNumber = matcher.group(3).toInt
+      val episodeTitle = matcher.group(4)
       //println(s"Found URL [$url] and title [$episode] in text [$text]")
-      episodes += new Tuple2(episodeUrl, episodeTitle)
+      episodes += new Episode(episodeTitle, episodeUrl, seasonNumber, episodeNumber)
       count += 1
     }
     //println(s"Found $count episodes.")
-    episodes.toList
+    episodes.toList.sortBy(0 - _.number)
   }
 
   def main(args:Array[String]): Unit = {
@@ -51,7 +53,8 @@ object EpisodeParser {
 
   val MAX_EPISODES = 5 // max number of episodes to show per show
 
-  val ABC_EPISODE = Pattern.compile("""<a\s+href="([^"]+)"[^>]+>\s*<span\s+class="season-number\s*light">S\d+\s*</span>\s+<span\s+class="episode-number">E\d+\s+</span>([^><]+)</a>""", Pattern.CASE_INSENSITIVE)
+  // 1: URL, 2: season number, 3: episode number, 4: title
+  val ABC_EPISODE = Pattern.compile("""<a\s+href="([^"]+)"[^>]+>\s*<span\s+class="season-number\s*light">S(\d+)\s*</span>\s+<span\s+class="episode-number">E(\d+)\s+</span>([^><]+)</a>""", Pattern.CASE_INSENSITIVE)
 }
 
 
