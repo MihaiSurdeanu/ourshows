@@ -33,7 +33,6 @@ object EpisodeParser {
     val matcher = ABC_EPISODE.matcher(html)
     var count = 0
     while(matcher.find()) {
-      val text = matcher.group()
       val episodeUrl = url.getProtocol + "://" + url.getHost + matcher.group(1)
       val seasonNumber = matcher.group(2).toInt
       val episodeNumber = matcher.group(3).toInt
@@ -46,7 +45,18 @@ object EpisodeParser {
 
   def parseCBSEpisodes(url:URL, html:String):List[Episode] = {
     // TODO: this is tricky, the carousel with episodes is hidden
-    List.empty
+    val episodes = new ListBuffer[Episode]
+    val matcher = CBS_EPISODE.matcher(html)
+    var count = 0
+    while(matcher.find()) {
+      val episodeTitle = matcher.group(1)
+      val episodeUrl = matcher.group(2)
+      val episodeNumber = matcher.group(3).toInt
+      val seasonNumber = matcher.group(4).toInt
+      episodes += new Episode(episodeTitle, episodeUrl, seasonNumber, episodeNumber)
+      count += 1
+    }
+    sortAndTake(episodes)
   }
 
   def parseFoxEpisodes(url:URL, html:String):List[Episode] = {
@@ -64,7 +74,6 @@ object EpisodeParser {
     val matcher = CC_EPISODE.matcher(html)
     var count = 0
     while(matcher.find()) {
-      val text = matcher.group()
       val episodeUrl = matcher.group(1)
       val episodeTitle = matcher.group(2)
       val urlMatcher = CC_URL.matcher(episodeUrl)
@@ -97,8 +106,13 @@ object EpisodeParser {
   // 1. URL, 2: title
   val CC_EPISODE = Pattern.compile("""<a\s+class="carouselseo"\s+href="([^"]+)">([^><]+)</a>""", Pattern.CASE_INSENSITIVE)
   // 1: season number, 2: episode number
-  val CC_URL = Pattern.compile("""http://southpark.cc.com/full-episodes/s(\d+)e(\d+)-[a-z0-9\-]+""", Pattern.CASE_INSENSITIVE)
+  val CC_URL = Pattern.compile("""http://\w+.cc.com/full-episodes/s(\d+)e(\d+)-[a-z0-9\-]+""", Pattern.CASE_INSENSITIVE)
+
+  // CBS (this only picks the last episode):
+  // 1: title, 2: URL, 3: episode number, 4: season number
+  val CBS_EPISODE = Pattern.compile("""\"name\":\"([^\"]+)\"\s*,\s*\"description\":\"[^\"]*\"\s*,\s*\"url\":\"([^\"]+)\"\s*,\s*\"image\":\"[^\"]+\"\s*,\s*\"episodeNumber\":\"(\d+)\"\s*,\s*\"partOfSeason\":{\"@type\":\"TVSeason\",\"seasonNumber\":\"(\d+)\"""", Pattern.CASE_INSENSITIVE)
 }
+
 
 
 
