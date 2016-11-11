@@ -34,7 +34,7 @@ object Application extends Controller{
   def insert = DBAction { implicit rs =>
     val show = showForm.bindFromRequest.get
 
-    if(show.episodesUrl.startsWith("http"))
+    if(show.episodesUrl.startsWith("http") && EpisodeParser.knownDomain(show.episodesUrl))
       shows.insert(show)
 
     Redirect(routes.Application.edit)

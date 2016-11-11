@@ -91,12 +91,22 @@ object EpisodeParser {
     episodes.toList.sortBy(x => 0 - (x.season * 100 + x.number)).take(MAX_EPISODES)
   }
 
+  def knownDomain(url:String): Boolean = {
+    for(domain <- KNOWN_WEBSITES) {
+      if(url.toLowerCase.contains(domain))
+        return true
+    }
+    false
+  }
+
   def main(args:Array[String]): Unit = {
     val html = Source.fromFile(args(0)).mkString.replaceAll("""\n""", " ")
-    parseABCEpisodes(new URL("http://abc.go.com"), html)
+    parseABCEpisodes(new URL("http://cbs.com"), html)
   }
 
   val MAX_EPISODES = 5 // max number of episodes to show per show
+
+  val KNOWN_WEBSITES = Set("abc.go.com", "cbs.com", "fox.com", "nbc.com", "cc.com")
 
   // ABC:
   // 1: URL, 2: season number, 3: episode number, 4: title
@@ -110,7 +120,7 @@ object EpisodeParser {
 
   // CBS (this only picks the last episode):
   // 1: title, 2: URL, 3: episode number, 4: season number
-  val CBS_EPISODE = Pattern.compile("""\"name\":\"([^\"]+)\"\s*,\s*\"description\":\"[^\"]*\"\s*,\s*\"url\":\"([^\"]+)\"\s*,\s*\"image\":\"[^\"]+\"\s*,\s*\"episodeNumber\":\"(\d+)\"\s*,\s*\"partOfSeason\":{\"@type\":\"TVSeason\",\"seasonNumber\":\"(\d+)\"""", Pattern.CASE_INSENSITIVE)
+  val CBS_EPISODE = Pattern.compile("""\"name\":\"([^\"]+)\"\s*,\s*\"description\":\"[^\"]*\"\s*,\s*\"url\":\"([^\"]+)\"\s*,\s*\"image\":\"[^\"]+\"\s*,\s*\"episodeNumber\":\"(\d+)\"\s*,\s*\"partOfSeason\":\{\"@type\":\"TVSeason\",\"seasonNumber\":\"(\d+)\"""", Pattern.CASE_INSENSITIVE)
 }
 
 
