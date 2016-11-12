@@ -30,11 +30,11 @@
     @for(s <- shows) {
       <div class="col-sm-4">
         <div class="list-group">
-          <a href="@s.episodesUrl" class="list-group-item active" target="_blank">
+          <a href="@s.episodesUrl" data-toggle="tooltip" title="@s.episodesUrl" class="list-group-item active" target="_blank">
             @s.name
           </a>
           @for(e <- s.episodes) {
-            <a href="@e.url" class="list-group-item" target="_blank">S@e.season-E@e.number: @e.title</a>
+            <a href="@e.url" data-toggle="tooltip" title="@e.url" class="list-group-item" target="_blank">S@e.season-E@e.number: @e.title</a>
           }
           @if(s.episodesUrl.contains("cbs.com")) {
             <a href="@s.episodesUrl" class="list-group-item" target="_blank">(check website for older episodes)</a>
