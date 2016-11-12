@@ -60,8 +60,18 @@ object EpisodeParser {
   }
 
   def parseFoxEpisodes(url:URL, html:String):List[Episode] = {
-    // TODO
-    List.empty
+    val episodes = new ListBuffer[Episode]
+    val matcher = FOX_EPISODE.matcher(html)
+    var count = 0
+    while(matcher.find()) {
+      val episodeUrl = "http://www.fox.com" + matcher.group(1)
+      val seasonNumber = matcher.group(2).toInt
+      val episodeNumber = matcher.group(3).toInt
+      val episodeTitle = matcher.group(4)
+      episodes += new Episode(episodeTitle, episodeUrl, seasonNumber, episodeNumber)
+      count += 1
+    }
+    sortAndTake(episodes)
   }
 
   def parseNBCEpisodes(url:URL, html:String):List[Episode] = {
@@ -121,6 +131,10 @@ object EpisodeParser {
   // CBS (this only picks the last episode):
   // 1: title, 2: URL, 3: episode number, 4: season number
   val CBS_EPISODE = Pattern.compile("""\"name\":\"([^\"]+)\"\s*,\s*\"description\":\"[^\"]*\"\s*,\s*\"url\":\"([^\"]+)\"\s*,\s*\"image\":\"[^\"]+\"\s*,\s*\"episodeNumber\":\"(\d+)\"\s*,\s*\"partOfSeason\":\{\"@type\":\"TVSeason\",\"seasonNumber\":\"(\d+)\"""", Pattern.CASE_INSENSITIVE)
+
+  // Fox:
+  // 1: URL, 2: season number, 3: episode number, 4: title
+  val FOX_EPISODE = Pattern.compile("""<a\s+href=\"([^\"]+)\"\s+data-video-uid=\"[^_]+_(\d+)_(\d+)\".+:full-episodes\|showpagefullepisodes\|general\|full\-episode\|\d+\|[^\|]+\|(.+)\&quot;\}\">""", Pattern.CASE_INSENSITIVE)
 }
 
 
