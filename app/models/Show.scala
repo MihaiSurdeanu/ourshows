@@ -17,7 +17,7 @@ case class Show(name: String, episodesUrl: String) {
       EpisodeCache.add(name, es, crtTimeInMinutes)
       es
     } else {
-      println(s"Using cache for show $name")
+      //println(s"Using cache for show $name")
       EpisodeCache.episodes(name).get
     }
 

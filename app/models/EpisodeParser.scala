@@ -75,8 +75,18 @@ object EpisodeParser {
   }
 
   def parseNBCEpisodes(url:URL, html:String):List[Episode] = {
-    // TODO
-    List.empty
+    val episodes = new ListBuffer[Episode]
+    val matcher = NBC_EPISODE.matcher(html)
+    var count = 0
+    while(matcher.find()) {
+      val episodeTitle = matcher.group(1)
+      val episodeUrl = "http://www.nbc.com" + matcher.group(2)
+      val seasonNumber = matcher.group(3).toInt
+      val episodeNumber = matcher.group(4).toInt
+      episodes += new Episode(episodeTitle, episodeUrl, seasonNumber, episodeNumber)
+      count += 1
+    }
+    sortAndTake(episodes)
   }
 
   def parseCCEpisodes(url:URL, html:String):List[Episode] = {
@@ -135,6 +145,10 @@ object EpisodeParser {
   // Fox:
   // 1: URL, 2: season number, 3: episode number, 4: title
   val FOX_EPISODE = Pattern.compile("""<a\s+href=\"([^\"]+)\"\s+data-video-uid=\"[^_]+_(\d+)_(\d+)\".+:full-episodes\|showpagefullepisodes\|general\|full\-episode\|\d+\|[^\|]+\|(.+)\&quot;\}\">""", Pattern.CASE_INSENSITIVE)
+
+  // NBC:
+  // 1: title, 2: URL, 3: season number, 4: episode number
+  val NBC_EPISODE = Pattern.compile("""\"title\":\"([^\"]+)\",\"type\":\"Full\s*Episode\",\"vChipRating":"[^\"]+\",\"pathname\":\"([^\"]+)\",\"seasonNumber\":\"(\d+)\",\"episodeNumber\":\"(\d+)\"""", Pattern.CASE_INSENSITIVE)
 }
 
 
