@@ -34,7 +34,7 @@
             @s.name
           </a>
           @for(e <- s.episodes) {
-            <a href="@e.url" data-toggle="tooltip" title="@e.url" class="list-group-item" target="_blank">S@e.season-E@e.number: @e.title</a>
+            <a href="@e.url" data-toggle="tooltip" title="@e.url" class="list-group-item" target="_blank">S@e.season E@e.number <strong>@e.title</strong></a>
           }
           @if(s.episodesUrl.contains("cbs.com")) {
             <a href="@s.episodesUrl" class="list-group-item" target="_blank">(check website for older episodes)</a>
