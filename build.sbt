@@ -1,4 +1,4 @@
-name := "activator-play-slick"
+name := "ourshows"
 
 version := "1.0-SNAPSHOT"
 
@@ -14,3 +14,4 @@ libraryDependencies ++= Seq(
 fork in Test := false
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+
