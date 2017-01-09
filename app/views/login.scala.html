@@ -1,0 +1,72 @@
+@(title: String)
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta name="google-signin-client_id" content="538254014779-543a63bvitm750g1r6cohng45sovqeaj.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+  </head>
+  <body>
+    <!-- HTML for render Google Sign-In button -->
+    <div id="my-signin2"></div>
+    <div id="userContent"></div>
+
+    <script>
+      function renderButton() {
+        gapi.signin2.render('my-signin2', {
+          'scope': 'profile email',
+          'width': 240,
+          'height': 50,
+          'longtitle': true,
+          'theme': 'dark',
+          'onsuccess': onSuccess,
+          'onfailure': onFailure
+        });
+      }
+
+      function onSuccess(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+        populateUserProfile(profile);
+
+        // similar behavior as clicking on a link
+        window.location.href = "/list";
+      }
+
+      function onFailure(error) {
+        console.log(error);
+      }
+
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+
+        // !NOTE: signOut -> enables users to sign out of your app without signing out of Google
+        auth2.signOut()
+          .then(function () {
+            $('#userContent').html('');
+            $('#my-signin2').slideDown('slow');
+          });
+      }
+
+      function populateUserProfile(profile) {
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        var profileHTML = '<div class="profile"><div class="head">Welcome ' + profile.getGivenName() + '! <a href="javascript:void(0);" onclick="signOut();">Sign out</a></div>';
+            profileHTML += '<img src="' + profile.getImageUrl() + '"/><div class="proDetails"><p>' + profile.getName() + '</p><p>' + profile.getEmail() + '</p></div></div>';
+
+        $('#userContent').html(profileHTML);
+        $('#my-signin2').slideUp('slow');
+      }
+    </script>
+  </body>
+</html>

@@ -14,6 +14,10 @@ import play.api.libs.json.Json._
 
 object Application extends Controller{
 
+  def login = Action {
+    Ok(views.html.login("our shows"))
+  }
+
   //create an instance of the table
   val shows = TableQuery[ShowsTable] //see a way to architect your app in the computers-database-slick sample
 

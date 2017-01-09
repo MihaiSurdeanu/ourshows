@@ -5,6 +5,7 @@
 # Main pages
 GET     /list                       controllers.Application.list
 GET     /edit                       controllers.Application.edit
+GET     /                           controllers.Application.login
 
 # Operations from /edit
 POST    /insert                     controllers.Application.insert
