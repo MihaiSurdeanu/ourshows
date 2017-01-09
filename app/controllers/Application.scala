@@ -20,8 +20,8 @@ object Application extends Controller{
   //JSON read/write macro
   implicit val showFormat = Json.format[Show]
 
-  def index = DBAction { implicit rs =>
-    Ok(views.html.index(shows.list.sortBy(_.name)))
+  def list = DBAction { implicit rs =>
+    Ok(views.html.list(shows.list.sortBy(_.name)))
   }
 
   val showForm = Form(
