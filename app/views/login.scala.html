@@ -36,7 +36,7 @@
         populateUserProfile(profile);
 
         // similar behavior as clicking on a link
-        window.location.href = "/list";
+        // window.location.href = "/list";
       }
 
       function onFailure(error) {
@@ -55,13 +55,13 @@
       }
 
       function populateUserProfile(profile) {
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
+        //console.log('Full Name: ' + profile.getName());
+        //console.log('Given Name: ' + profile.getGivenName());
+        //console.log('Family Name: ' + profile.getFamilyName());
+        //console.log("Image URL: " + profile.getImageUrl());
+        //console.log("Email: " + profile.getEmail());
 
-        var profileHTML = '<div class="profile"><div class="head">Welcome ' + profile.getGivenName() + '! <a href="javascript:void(0);" onclick="signOut();">Sign out</a></div>';
+        var profileHTML = '<div class="profile"><div class="head">WELCOME!!!!!! ' + profile.getGivenName() + '! <a href="javascript:void(0);" onclick="signOut();">Sign out</a></div>';
             profileHTML += '<img src="' + profile.getImageUrl() + '"/><div class="proDetails"><p>' + profile.getName() + '</p><p>' + profile.getEmail() + '</p></div></div>';
 
         $('#userContent').html(profileHTML);
